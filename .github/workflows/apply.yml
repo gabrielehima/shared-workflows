@@ -9,7 +9,7 @@ jobs:
 
   test:
     needs: setup
-    uses: ./.github/workflows/tests.yml
+    uses: ./.github/workflows/test.yml
 
   apply:
     runs-on: ubuntu-latest
