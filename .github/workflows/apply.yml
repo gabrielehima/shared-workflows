@@ -12,7 +12,37 @@ jobs:
     uses: ./.github/workflows/test.yml
 
   apply:
+    needs: test
     runs-on: ubuntu-latest
     steps:
-     - name: deploy
-       run: terraform plan
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: test.tf
+   - name: deploy
+     run: terraform plan
+
+
+name: deployment
+
+on:
+  workflow_call
+
+jobs: 
+  setup:
+    uses: ./.github/workflows/setup.yml
+
+  test:
+    needs: setup
+    uses: ./.github/workflows/test.yml
+
+  apply:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: test.tf
+      - name: deploy
+        run: terraform plan
